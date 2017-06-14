@@ -1,3 +1,7 @@
+/**
+ * @author: Liam Childs (liam.h.childs@gmail.com)
+ * @brief: A graph class
+ */
 #ifndef GRAPH_GRAPH_H
 #define GRAPH_GRAPH_H
 
@@ -6,22 +10,20 @@
 #include <unordered_set>
 
 
-/*
+/**
  * A (un)directed graph that supports only a single edge between vertices. Can be treated as ordered by using the
  * get_parents and get_children functions. Can be treated as unordered by using the get_neighbours function.
  */
 template<typename V>
 class Graph {
-
-    struct Vertex {
-        std::unordered_set<V> parents;
-        std::unordered_set<V> children;
-    };
-
-    std::unordered_map<V, Vertex> _edges;
-
 public:
 
+    /**
+     * Add a connection between from and to.
+     * add_edge automatically creates any missing vertices.
+     * @param from connect from
+     * @param to connect to
+     */
     void add_edge(const V &from, const V &to) {
         add_vertex(from);
         add_vertex(to);
@@ -29,12 +31,22 @@ public:
         _edges[to].parents.insert(from);
     }
 
+    /**
+     * Add a vertex.
+     * add_vertex can be used if a vertex has no connections.
+     * @param vertex added vertex
+     */
     void add_vertex(const V &vertex) {
         if (_edges.find(vertex) == _edges.end()) {
             _edges.emplace(vertex, Vertex{});
         }
     }
 
+    /**
+     * Get children of given vertex.
+     * @param vertex get the children of this vertex
+     * @return children of the given vertex
+     */
     const std::unordered_set<V> get_children(const V &vertex) const {
         std::unordered_set<V> children;
         if (_edges.find(vertex) == _edges.end()) {
@@ -43,6 +55,11 @@ public:
         return _edges.at(vertex).children;
     }
 
+    /**
+     * Get parents of given vertex.
+     * @param vertex get the parents of this vertex
+     * @return parents of the given vertex
+     */
     const std::unordered_set<V> get_parents(const V &vertex) const {
         std::unordered_set<V> parents;
         if (_edges.find(vertex) == _edges.end()) {
@@ -51,6 +68,12 @@ public:
         return _edges.at(vertex).parents;
     }
 
+    /**
+     * Get parents and children of the given vertex.
+     * Can also be used to simulated undirected graphs.
+     * @param vertex get the neighbours of this vertex
+     * @return neighbours of the given vertex
+     */
     const std::unordered_set<V> get_neighbours(const V &vertex) const {
         std::unordered_set<V> neighbours;
         if (_edges.find(vertex) == _edges.end()) {
@@ -61,7 +84,12 @@ public:
         return neighbours;
     }
 
-    const std::unordered_set<V> get_descendents(const V &vertex) const {
+    /**
+     * Get descendants of given vertex.
+     * @param vertex get the descendants of the given vertex
+     * @return descendants of the given vertex
+     */
+    const std::unordered_set<V> get_descendants(const V &vertex) const {
         std::unordered_set<V> descendents;
         if (_edges.find(vertex) == _edges.end()) {
             return descendents;
@@ -87,6 +115,11 @@ public:
         return descendents;
     }
 
+    /**
+     * Get ancestors of given vertex.
+     * @param vertex get the ancestors of the given vertex
+     * @return ancestors of the given vertex
+     */
     const std::unordered_set<V> get_ancestors(const V &vertex) const {
         std::unordered_set<V> ancestors;
         if (_edges.find(vertex) == _edges.end()) {
@@ -113,7 +146,12 @@ public:
         return ancestors;
     }
 
-    void update(const Graph &that) {
+    /**
+     * Join graph with another graph.
+     * *union* is a keywork, so an underscore has been added.
+     * @param that graph to join with
+     */
+    void union_(const Graph &that) {
         for (auto item : that._edges) {
             add_vertex(item.first);
             for (auto child : item.second.children) {
@@ -121,6 +159,15 @@ public:
             }
         }
     }
+
+private:
+
+    struct Vertex {
+        std::unordered_set<V> parents;
+        std::unordered_set<V> children;
+    };
+
+    std::unordered_map<V, Vertex> _edges;
 };
 
 #endif //GRAPH_GRAPH_H

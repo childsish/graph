@@ -42,11 +42,11 @@ TEST_F(GraphTest, test_get_neighbours) {
     EXPECT_EQ(expected, graph.get_neighbours(1));
 }
 
-TEST_F(GraphTest, test_get_descendents) {
+TEST_F(GraphTest, test_get_descendants) {
     expected = {1, 2, 3, 4, 5};
-    EXPECT_EQ(expected, graph.get_descendents(0));
+    EXPECT_EQ(expected, graph.get_descendants(0));
     expected = {3, 4, 5};
-    EXPECT_EQ(expected, graph.get_descendents(1));
+    EXPECT_EQ(expected, graph.get_descendants(1));
 }
 
 TEST_F(GraphTest, test_get_ancestors) {
@@ -56,7 +56,7 @@ TEST_F(GraphTest, test_get_ancestors) {
     EXPECT_EQ(expected, graph.get_ancestors(0));
 }
 
-TEST_F(GraphTest, test_update) {
+TEST_F(GraphTest, test_union) {
     Graph<int> that;
     that.add_edge(2, 6);
     that.add_edge(2, 7);
@@ -64,14 +64,14 @@ TEST_F(GraphTest, test_update) {
     that.add_edge(9, 3);
 
     expected = {3};
-    EXPECT_EQ(expected, that.get_descendents(9));
+    EXPECT_EQ(expected, that.get_descendants(9));
     expected = {2, 6};
     EXPECT_EQ(expected, that.get_ancestors(8));
 
-    that.update(graph);
+    that.union_(graph);
 
     expected = {3, 5};
-    EXPECT_EQ(expected, that.get_descendents(9));
+    EXPECT_EQ(expected, that.get_descendants(9));
     expected = {0, 2, 6};
     EXPECT_EQ(expected, that.get_ancestors(8));
 }
