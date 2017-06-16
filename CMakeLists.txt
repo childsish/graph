@@ -3,5 +3,10 @@ project(graph)
 
 set(CMAKE_CXX_STANDARD 14)
 
-enable_testing()
-add_subdirectory(tests)
+
+option(GRAPH__DISABLE_TESTS "Disable unit tests for graph library" off)
+
+if (!GRAPH__DISABLE_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
