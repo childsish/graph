@@ -9,11 +9,13 @@
 
 template<typename V, std::size_t N>
 class PartiteGraph : public Graph<V> {
-
-    std::array<std::unordered_set<V>, N> partitions;
-
 public:
 
+    /**
+     * Add an edge between two named vertices
+     * @param from vertex to join from
+     * @param to vertex to join to
+     */
     void add_edge(const V &from, const V &to) {
         int from_partition = _get_partition(from);
         int to_partition = _get_partition(to);
@@ -38,6 +40,11 @@ public:
 
     void add_vertex(const V &vertex) = delete;
 
+    /**
+     * Add a named vertex
+     * @param vertex name of the vertex to add
+     * @param partition partition to add vertex to
+     */
     void add_vertex(const V &vertex, int partition) {
         int current_partition = _get_partition(vertex);
         if (current_partition == -1) {
@@ -51,6 +58,10 @@ public:
         }
     }
 
+    /**
+     * Join two graphs
+     * @param that graph to join to
+     */
     void update(const PartiteGraph<V, N> &that) {
         for (unsigned int i = 0; i < N; ++i) {
             partitions[i].insert(that.partitions[i].begin(), that.partitions[i].end());
@@ -58,12 +69,12 @@ public:
         Graph<V>::update(that);
     }
 
-private:
-
-    /*
+    /**
      * Get the partition of a vertex. -1 if vertex not in a partition.
+     * @param vertex get the partition of this vertex
+     * @return partition the vertex belongs to
      */
-    int _get_partition(const V &vertex) {
+    int get_partition(const V &vertex) {
         for (unsigned int i = 0; i < N; ++i) {
             if (partitions[i].find(vertex) != partitions[i].end()) {
                 return i;
@@ -71,6 +82,10 @@ private:
         }
         return -1;
     }
+
+private:
+
+    std::array<std::unordered_set<V>, N> partitions;
 
 };
 
