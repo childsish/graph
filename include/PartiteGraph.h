@@ -74,7 +74,7 @@ public:
      * @param vertex get the partition of this vertex
      * @return partition the vertex belongs to
      */
-    int get_partition(const V &vertex) {
+    int get_partition(const V &vertex) const {
         for (unsigned int i = 0; i < N; ++i) {
             if (partitions[i].find(vertex) != partitions[i].end()) {
                 return i;
