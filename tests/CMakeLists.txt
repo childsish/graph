@@ -6,13 +6,13 @@ set(CMAKE_CXX_STANDARD 14)
 add_subdirectory(googletest)
 
 
-add_executable(test_units
+add_executable(test_graph
         test_Graph.cpp
         test_PartiteGraph.cpp)
 target_include_directories(
-        test_units PRIVATE
+        test_graph PRIVATE
         ${gtest_SOURCE_DIR}/include
         ../include
 )
-target_link_libraries(test_units gtest_main)
-add_test(test_units test_units)
+target_link_libraries(test_graph gtest_main)
+add_test(test_graph test_graph)
