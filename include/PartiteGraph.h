@@ -3,62 +3,62 @@
 
 #include <array>
 #include <sstream>
+#include <type_traits>
 #include <unordered_set>
 #include "Graph.h"
-
 
 template<typename V, typename ...Ts>
 class PartiteGraph : public Graph<V> {
 public:
     void add_vertex(const V &vertex) = delete;
-
-    /*template<typename T>
-    T &get_vertex(const V &vertex) {
-        std::stringstream message;
-        message << "Vertex " << vertex << " not found.";
-        throw std::runtime_error(message.str());
-    }*/
-
-    /*void update(const PartiteGraph<V, Ts...> &that) {
-        Graph<V>::update(that);
-    }*/
 };
 
 template<typename V, typename T, typename ...Ts>
 class PartiteGraph<V, T, Ts...> : public PartiteGraph<V, Ts...> {
 public:
+
+    template <unsigned int partition>
+    const typename std::enable_if<partition == 0, std::unordered_map<V, T>>::type &
+    get_partition() const {
+        return _partition;
+    }
+
+    template <unsigned int partition>
+    const typename std::enable_if<partition != 0, std::unordered_map<V, typename std::tuple_element<partition, std::tuple<T, Ts...>>::type>>::type &
+    get_partition() const {
+        const PartiteGraph<V, Ts...>& graph = *this;
+        return graph.get_partition<partition - 1>();
+    }
+
+    template <unsigned int partition>
+    void add_vertex(const V &vertex, const typename std::enable_if<partition == 0, T>::type &type) {
+        _partition.emplace(vertex, type);
+    }
+
+    template <unsigned int partition>
+    void add_vertex(const V &vertex, const typename std::enable_if<partition != 0, typename std::tuple_element<partition, std::tuple<T, Ts...>>::type>::type &type) {
+        PartiteGraph<V, Ts...>& graph = *this;
+        graph.add_vertex<partition - 1>(vertex, type);
+    }
+
+    template <unsigned int partition>
+    const typename std::enable_if<partition == 0, T>::type &
+    get_vertex(const V& vertex) const {
+        return _partition.at(vertex);
+    };
+
+    template <unsigned int partition>
+    const typename std::enable_if<partition != 0, const typename std::tuple_element<partition, std::tuple<T, Ts...>>::type>::type &
+    get_vertex(const V& vertex) const {
+        const PartiteGraph<V, Ts...>& graph = *this;
+        return graph.get_vertex<partition - 1>(vertex);
+    };
+
+
+private:
+
     std::unordered_map<V, T> _partition;
 };
-
-
-template <unsigned int, typename> struct VertexAdder;
-
-template <class V, class T, class... Ts>
-struct VertexAdder<0, PartiteGraph<V, T, Ts...>> {
-    typedef T type;
-};
-
-template <unsigned int partition, class V, class T, class... Ts>
-struct VertexAdder<partition, PartiteGraph<V, T, Ts...>> {
-    typedef typename VertexAdder<partition - 1, PartiteGraph<V, Ts...>>::type type;
-};
-
-
-/**
- * Add a named vertex
- * @param vertex name of the vertex to add
- * @param partition partition to add vertex to
- */
-template <unsigned int partition, class V, class... Ts>
-void add_vertex(PartiteGraph<V, Ts...>& graph, const V &vertex, typename std::enable_if<partition == 0, const typename VertexAdder<0, PartiteGraph<V, Ts...>>::type>::type &type) {
-    graph._partition.emplace(vertex, type);
-}
-
-template <unsigned int partition, class V, class T, class... Ts>
-void add_vertex(PartiteGraph<V, T, Ts...>& graph, const V &vertex, typename std::enable_if<partition != 0, const typename VertexAdder<partition, PartiteGraph<V, T, Ts...>>::type>::type &type) {
-    PartiteGraph<V, Ts...>& base = graph;
-    return add_vertex<partition - 1>(base, vertex, type);
-}
 
 
 #endif //GRAPH_PARTITEGRAPH_H
