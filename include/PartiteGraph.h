@@ -17,6 +17,11 @@ template<typename V, typename T, typename ...Ts>
 class PartiteGraph<V, T, Ts...> : public PartiteGraph<V, Ts...> {
 public:
 
+    /**
+     * Get the named partition
+     * @tparam partition partition to get
+     * @return
+     */
     template <unsigned int partition>
     const typename std::enable_if<partition == 0, std::unordered_map<V, T>>::type &
     get_partition() const {
@@ -30,6 +35,12 @@ public:
         return graph.get_partition<partition - 1>();
     }
 
+    /**
+     * Add a vertex to the named partition
+     * @tparam partition parition to add vertex to
+     * @param vertex vertex identifier
+     * @param type vertex to add
+     */
     template <unsigned int partition>
     void add_vertex(const V &vertex, const typename std::enable_if<partition == 0, T>::type &type) {
         _partition.emplace(vertex, type);
@@ -41,6 +52,12 @@ public:
         graph.add_vertex<partition - 1>(vertex, type);
     }
 
+    /**
+     * Get a vertex from the named partition
+     * @tparam partition partition to get vertex from
+     * @param vertex vertex identifier
+     * @return gotten vertex
+     */
     template <unsigned int partition>
     const typename std::enable_if<partition == 0, T>::type &
     get_vertex(const V& vertex) const {
