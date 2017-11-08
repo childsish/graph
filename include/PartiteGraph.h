@@ -1,10 +1,7 @@
 #ifndef GRAPH_PARTITEGRAPH_H
 #define GRAPH_PARTITEGRAPH_H
 
-#include <array>
-#include <sstream>
 #include <type_traits>
-#include <unordered_set>
 #include "Graph.h"
 
 template<typename V, typename ...Ts>
