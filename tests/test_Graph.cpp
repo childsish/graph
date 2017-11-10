@@ -1,8 +1,7 @@
 #include "gtest/gtest.h"
 
 #include <unordered_set>
-
-#include "Graph.h"
+#include <graph/Graph.h>
 
 
 class GraphTest : public ::testing::Test {

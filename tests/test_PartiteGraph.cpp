@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "PartiteGraph.h"
+#include <graph/PartiteGraph.h>
 
 
 struct Vertex {
