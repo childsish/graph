@@ -22,6 +22,25 @@ namespace graph {
 
     template<typename V, typename T, typename ...Ts>
     class PartiteGraph<V, T, Ts...> : public PartiteGraph<V, Ts...> {
+
+        template<unsigned int partition>
+        using PartitionTypeAt = typename std::tuple_element<partition, std::tuple<T, Ts...>>::type;
+
+        template<unsigned int partition>
+        using FirstPartitionType = typename std::enable_if<partition == 0, T>::type;
+
+        template<unsigned int partition>
+        using PartitionType = typename std::enable_if<partition != 0,
+                const PartitionTypeAt<partition>>::type;
+
+        template<unsigned int partition>
+        using FirstPartition = typename std::enable_if<partition == 0,
+                std::unordered_map<V, T>>::type;
+
+        template<unsigned int partition>
+        using Partition = typename std::enable_if<partition != 0,
+                std::unordered_map<V, PartitionTypeAt<partition>>>::type;
+
     public:
 
         /**
@@ -30,13 +49,13 @@ namespace graph {
          * @return
          */
         template <unsigned int partition>
-        const typename std::enable_if<partition == 0, std::unordered_map<V, T>>::type &
+        const FirstPartition<partition>&
         get_partition() const {
             return _partition;
         }
 
         template <unsigned int partition>
-        const typename std::enable_if<partition != 0, std::unordered_map<V, typename std::tuple_element<partition, std::tuple<T, Ts...>>::type>>::type &
+        const Partition<partition>&
         get_partition() const {
             const PartiteGraph<V, Ts...>& graph = *this;
             return graph.get_partition<partition - 1>();
@@ -49,12 +68,12 @@ namespace graph {
          * @param type vertex to add
          */
         template <unsigned int partition>
-        void add_vertex(const V &vertex, const typename std::enable_if<partition == 0, T>::type &type) {
+        void add_vertex(const V &vertex, const FirstPartitionType<partition> &type) {
             _partition.emplace(vertex, type);
         }
 
         template <unsigned int partition>
-        void add_vertex(const V &vertex, const typename std::enable_if<partition != 0, typename std::tuple_element<partition, std::tuple<T, Ts...>>::type>::type &type) {
+        void add_vertex(const V &vertex, const PartitionType<partition> &type) {
             PartiteGraph<V, Ts...>& graph = *this;
             graph.add_vertex<partition - 1>(vertex, type);
         }
@@ -66,13 +85,13 @@ namespace graph {
          * @return gotten vertex
          */
         template <unsigned int partition>
-        const typename std::enable_if<partition == 0, T>::type &
+        const FirstPartitionType<partition>&
         get_vertex(const V& vertex) const {
             return _partition.at(vertex);
         };
 
         template <unsigned int partition>
-        const typename std::enable_if<partition != 0, const typename std::tuple_element<partition, std::tuple<T, Ts...>>::type>::type &
+        const PartitionType<partition>&
         get_vertex(const V& vertex) const {
             const PartiteGraph<V, Ts...>& graph = *this;
             return graph.get_vertex<partition - 1>(vertex);
