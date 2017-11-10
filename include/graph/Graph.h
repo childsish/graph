@@ -9,12 +9,12 @@
 #include <unordered_map>
 #include <unordered_set>
 
-
 namespace graph {
 
     /**
-     * A (un)directed graph that supports only a single edge between vertices. Can be treated as ordered by using the
-     * get_parents and get_children functions. Can be treated as unordered by using the get_neighbours function.
+     * An undirected graph that supports only a single edge between vertices.
+     * Can be treated as ordered by using the get_parents and get_children
+     * functions. Can be treated as unordered by using the get_neighbours function.
      */
     template<typename V>
     class Graph {
