@@ -1,19 +1,18 @@
 #include "gtest/gtest.h"
 
 #include <unordered_set>
-
-#include "PartiteGraph.h"
+#include <graph/PartiteGraph.h>
 
 
 TEST(PartiteGraphTest, test_add_vertex) {
-    PartiteGraph<int, 2> graph;
+    graph::PartiteGraph<int, 2> graph;
 
     graph.add_vertex(0, 0);
     EXPECT_THROW(graph.add_vertex(0, 1), std::runtime_error);
 }
 
 TEST(PartiteGraphTest, test_add_edge) {
-    PartiteGraph<int, 2> graph;
+    graph::PartiteGraph<int, 2> graph;
 
     EXPECT_THROW(graph.add_edge(0, 1), std::runtime_error);
 

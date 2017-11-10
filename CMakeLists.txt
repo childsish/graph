@@ -12,8 +12,7 @@ option(GRAPH_BUILD_TESTS "Enable/Disable unit tests for the graph library." on)
 
 add_library(graph INTERFACE)
 target_include_directories(graph INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include}
-        $<INSTALL_INTERFACE:include/graph>)
+        include/)
 
 
 # Unit tests

@@ -1,14 +1,13 @@
 #include "gtest/gtest.h"
 
 #include <unordered_set>
-
-#include "Graph.h"
+#include <graph/Graph.h>
 
 
 class GraphTest : public ::testing::Test {
 public:
 
-    Graph<int> graph;
+    graph::Graph<int> graph;
 
     std::unordered_set<int> expected;
 
@@ -57,7 +56,7 @@ TEST_F(GraphTest, test_get_ancestors) {
 }
 
 TEST_F(GraphTest, test_union) {
-    Graph<int> that;
+    graph::Graph<int> that;
     that.add_edge(2, 6);
     that.add_edge(2, 7);
     that.add_edge(6, 8);
