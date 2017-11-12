@@ -1,7 +1,7 @@
 #ifndef GRAPH_PARTITEGRAPH_H
 #define GRAPH_PARTITEGRAPH_H
 
-
+#include <sstream>
 #include <type_traits>
 #include "Graph.h"
 
@@ -18,6 +18,13 @@ namespace graph {
     class PartiteGraph : public Graph<V> {
     public:
         void add_vertex(const V &vertex) = delete;
+
+        unsigned int
+        get_vertex_partition(const V &vertex, unsigned int partition = 0) const {
+            std::stringstream buffer;
+            buffer << "Vertex " << vertex << " not found in any partition.";
+            throw std::runtime_error(buffer.str());
+        }
     };
 
     template<typename V, typename T, typename ...Ts>
@@ -44,26 +51,34 @@ namespace graph {
     public:
 
         /**
-         * Get the named partition
-         * @tparam partition partition to get
-         * @return
+         * Add a connection between from and to.
+         * add_edge can not create missing vertices as they need to be added to a partition
+         * @param from connect from
+         * @param to connect to
          */
-        template <unsigned int partition>
-        const FirstPartition<partition>&
-        get_partition() const {
-            return _partition;
-        }
-
-        template <unsigned int partition>
-        const Partition<partition>&
-        get_partition() const {
-            const PartiteGraph<V, Ts...>& graph = *this;
-            return graph.get_partition<partition - 1>();
+        void add_edge(const V &from, const V &to) {
+            if (_edges.find(from) == _edges.end()) {
+                std::stringstream buffer;
+                buffer << "From vertex (" << from << ") has not been created.";
+                throw std::runtime_error(buffer.str());
+            }
+            else if (_edges.find(to) == _edges.end()) {
+                std::stringstream buffer;
+                buffer << "To vertex (" << to << ") has not been created.";
+                throw std::runtime_error(buffer.str());
+            }
+            else if (get_vertex_partition(from) == get_vertex_partition(to)) {
+                std::stringstream buffer;
+                buffer << "From vertex (" << from << ") and to vertex (" << to
+                       << ") both belong to partition " << get_vertex_partition(from) << ".";
+                throw std::runtime_error(buffer.str());
+            }
+            Graph<V>::add_edge(from, to);
         }
 
         /**
          * Add a vertex to the named partition
-         * @tparam partition parition to add vertex to
+         * @tparam partition partition to add vertex to
          * @param vertex vertex identifier
          * @param type vertex to add
          */
@@ -97,10 +112,43 @@ namespace graph {
             return graph.get_vertex<partition - 1>(vertex);
         };
 
+        /**
+         * Get the named partition
+         * @tparam partition partition to get
+         * @return
+         */
+        template <unsigned int partition>
+        const FirstPartition<partition>&
+        get_partition() const {
+            return _partition;
+        }
+
+        template<unsigned int partition>
+        const Partition<partition>&
+        get_partition() const {
+            const PartiteGraph<V, Ts...>& graph = *this;
+            return graph.get_partition<partition - 1>();
+        }
+
+        /**
+         * Get the partition the vertex belongs to
+         * @param vertex vertex to inquire about
+         * @return partition number vertex belongs to
+         */
+        unsigned int
+        get_vertex_partition(const V &vertex, unsigned int partition = 0) const {
+            if (_partition.find(vertex) == _partition.end()) {
+                const PartiteGraph<V, Ts...> graph = *this;
+                return graph.get_vertex_partition(vertex, partition + 1);
+            }
+            return partition;
+        }
+
 
     private:
 
         std::unordered_map<V, T> _partition;
+
     };
 }
 
