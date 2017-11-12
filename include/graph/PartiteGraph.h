@@ -19,6 +19,11 @@ namespace graph {
     public:
         void add_vertex(const V &vertex) = delete;
 
+        bool
+        has_vertex(const V &vertex) const {
+            return false;
+        }
+
         unsigned int
         get_vertex_partition(const V &vertex, unsigned int partition = 0) const {
             std::stringstream buffer;
@@ -57,17 +62,22 @@ namespace graph {
          * @param to connect to
          */
         void add_edge(const V &from, const V &to) {
-            if (_edges.find(from) == _edges.end()) {
+            if (!has_vertex(from)) {
                 std::stringstream buffer;
                 buffer << "From vertex (" << from << ") has not been created.";
                 throw std::runtime_error(buffer.str());
             }
-            else if (_edges.find(to) == _edges.end()) {
+            unsigned int from_partition = get_vertex_partition(from);
+
+            if (!has_vertex(to)) {
                 std::stringstream buffer;
                 buffer << "To vertex (" << to << ") has not been created.";
                 throw std::runtime_error(buffer.str());
             }
-            else if (get_vertex_partition(from) == get_vertex_partition(to)) {
+            unsigned int to_partition = get_vertex_partition(to);
+
+
+            if (from_partition == to_partition) {
                 std::stringstream buffer;
                 buffer << "From vertex (" << from << ") and to vertex (" << to
                        << ") both belong to partition " << get_vertex_partition(from) << ".";
@@ -91,6 +101,20 @@ namespace graph {
         void add_vertex(const V &vertex, const PartitionType<partition> &type) {
             PartiteGraph<V, Ts...>& graph = *this;
             graph.add_vertex<partition - 1>(vertex, type);
+        }
+
+        /**
+         * Return true if vertex in graph
+         * @param vertex vertex to search for
+         * @return true if vertex in graph else false
+         */
+        bool
+        has_vertex(const V vertex) const {
+            if (_partition.find(vertex) == _partition.end()) {
+                const PartiteGraph<V, Ts...> &graph = *this;
+                return graph.has_vertex(vertex);
+            }
+            return true;
         }
 
         /**
