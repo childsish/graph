@@ -14,8 +14,8 @@ implemented that allow most other graph types to be simulated; `Graph` and `Part
 ### Specifying type
 
 When declaring a `Graph`, the type of the vertex identifiers needs to be defined using the template parameter. Internally
-vertices are stored in an [`std::unordered_map`][1] and thus must follow the specifications outlined for
-[`UnorderedAssociativeContainers`][2].
+vertices are stored in an [`std::unordered_map`](1) and thus must follow the specifications outlined for
+[`UnorderedAssociativeContainers`](2).
 
 ```cpp
 #include <string>
@@ -116,7 +116,7 @@ graph.add_edge(6, 3);
 
 * **Undirected graph.** Simply use `Graph::get_neighbours`.
 * **Edge weights.** Use a `PartiteGraph` and add edge weights to one of the partition types. See example
-[Adding edges](#adding-edges).
+[Adding edges](#adding-edges-1).
 * **Multigraph.** Use a `PartiteGraph` with two partitions for the vertices and edges. This will allow any
 number of vertices in the vertex partition to be connected to any number of vertices in the edge partition. A subclass
 could be used to simplify getting neighbours. 
