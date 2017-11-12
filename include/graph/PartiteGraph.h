@@ -93,14 +93,14 @@ namespace graph {
          * @param type vertex to add
          */
         template <unsigned int partition>
-        void add_vertex(const V &vertex, const FirstPartitionType<partition> &type) {
+        void add(const V &vertex, const FirstPartitionType<partition> &type) {
             _partition.emplace(vertex, type);
         }
 
         template <unsigned int partition>
-        void add_vertex(const V &vertex, const PartitionType<partition> &type) {
+        void add(const V &vertex, const PartitionType<partition> &type) {
             PartiteGraph<V, Ts...>& graph = *this;
-            graph.add_vertex<partition - 1>(vertex, type);
+            graph.add<partition - 1>(vertex, type);
         }
 
         /**
@@ -125,15 +125,15 @@ namespace graph {
          */
         template <unsigned int partition>
         const FirstPartitionType<partition>&
-        get_vertex(const V& vertex) const {
+        get(const V &vertex) const {
             return _partition.at(vertex);
         };
 
         template <unsigned int partition>
         const PartitionType<partition>&
-        get_vertex(const V& vertex) const {
+        get(const V &vertex) const {
             const PartiteGraph<V, Ts...>& graph = *this;
-            return graph.get_vertex<partition - 1>(vertex);
+            return graph.get<partition - 1>(vertex);
         };
 
         /**
