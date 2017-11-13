@@ -1,5 +1,7 @@
 # graph
 
+[![Build Status](https://travis-ci.org/childsish/graph.svg?branch=master)](https://travis-ci.org/childsish/graph)
+
 *graph* is a simple header library of basic C++ graph (as in networks, not plots) classes. A couple of basic classes are
 implemented that allow most other graph types to be simulated; `Graph` and `PartiteGraph`.
  

@@ -1,5 +1,4 @@
-language:
- - cpp
+language: cpp
 compiler: gcc
 
 # This will run on Travis' 'new' container-based infrastructure
@@ -13,7 +12,7 @@ branches:
 # Environment variables
 env:
   global:
-- GH_REPO_REF: github.com/childsish/graph.git
+    - GH_REPO_REF: github.com/childsish/graph.git
 
 # Install dependencies
 addons:
