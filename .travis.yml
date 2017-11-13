@@ -13,6 +13,19 @@ env:
   global:
     - GH_REPO_REF: github.com/childsish/graph.git
 
+
+install:
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p "${DEPS_DIR}"
+  - cd "${DEPS_DIR}"
+  - JOBS=2
+  - CMAKE_VERSION=3.8.2
+  - |
+    CMAKE_URL="https://cmake.org/files/v${CMAKE_VERSION%.[0-9]}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
+    mkdir cmake && travis_retry wget --no-check-certificate -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+    export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+  - cmake --version
+
 # Install dependencies
 addons:
   apt:
@@ -27,14 +40,6 @@ addons:
       - doxygen-latex
       - doxygen-gui
       - graphviz
-
-install:
-  - CMAKE_VERSION=3.8.2
-  - |
-    CMAKE_URL="https://cmake.org/files/v${CMAKE_VERSION%.[0-9]}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
-    mkdir cmake && travis_retry wget --no-check-certificate -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-    export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-- cmake --version
 
 # Build your code e.g. by calling make
 script:
