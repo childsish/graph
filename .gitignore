@@ -1,2 +1,4 @@
 .idea
 cmake-*
+docs/html
+docs/latex
