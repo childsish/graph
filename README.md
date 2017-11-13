@@ -115,14 +115,12 @@ graph.add_edge(6, 3);
 ## Different graph types
 
 * **Undirected graph.** Simply use `Graph::get_neighbours`.
-* **Edge weights.** Use a `PartiteGraph` and add edge weights to one of the partition types. See example
+* **Multigraph.** Use a `PartiteGraph` with two partitions. One partition is for vertex vertices and the other is for
+ edge vertices. This will allow vertices in the vertex partition to be connected with each other via vertices in the
+ edge partition. A subclass could be used to simplify getting neighbours. See example [Adding edges](#adding-edges-1).
+* **Edge weights.** Use a `PartiteGraph` and add edge weights to one of the partition types. Also see example
 [Adding edges](#adding-edges-1).
-* **Multigraph.** Use a `PartiteGraph` with two partitions for the vertices and edges. This will allow any
-number of vertices in the vertex partition to be connected to any number of vertices in the edge partition. A subclass
-could be used to simplify getting neighbours. 
 
-* ****
-```
 
 [1]: http://en.cppreference.com/w/cpp/container/unordered_map
 [2]: http://en.cppreference.com/w/cpp/concept/UnorderedAssociativeContainer

@@ -1,3 +1,7 @@
+/**
+ * @author: Liam Childs (liam.h.childs@gmail.com)
+ * @brief: A graph class
+ */
 #ifndef GRAPH_PARTITEGRAPH_H
 #define GRAPH_PARTITEGRAPH_H
 
