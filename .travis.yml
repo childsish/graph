@@ -1,8 +1,7 @@
+dist: trusty
+sudo: require
 language: cpp
 compiler: gcc
-
-# This will run on Travis' 'new' container-based infrastructure
-sudo: false
 
 # Blacklist
 branches:
@@ -17,16 +16,30 @@ env:
 # Install dependencies
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - cmake
+      - gcc-6
+      - g++-6
       - doxygen
       - doxygen-doc
       - doxygen-latex
       - doxygen-gui
       - graphviz
 
+install:
+  - CMAKE_VERSION=3.8.2
+  - |
+    CMAKE_URL="https://cmake.org/files/v${CMAKE_VERSION%.[0-9]}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
+    mkdir cmake && travis_retry wget --no-check-certificate -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+    export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+- cmake --version
+
 # Build your code e.g. by calling make
 script:
+  - sudo ln -s /usr/bin/gcc-6 /usr/local/bin/gcc
+  - sudo ln -s /usr/bin/g++-6 /usr/local/bin/g++
   - mkdir build
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" ..
