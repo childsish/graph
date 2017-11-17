@@ -33,9 +33,9 @@ TEST(PartiteGraphTest, test_get_partition_by_number) {
 
 TEST(PartiteGraphTest, test_get_partition_of_vertex) {
     graph::PartiteGraph<int, Vertex, Edge> graph;
-    graph.add<vertex_partition>(0, {"0"});
-    graph.add<vertex_partition>(1, {"1"});
-    graph.add<edge_partition>(2, {1.0});
+    graph.add_vertex<vertex_partition>(0, {"0"});
+    graph.add_vertex<vertex_partition>(1, {"1"});
+    graph.add_vertex<edge_partition>(2, {1.0});
 
     EXPECT_EQ(graph.get_vertex_partition(0), 0);
     EXPECT_EQ(graph.get_vertex_partition(1), 0);
@@ -46,21 +46,21 @@ TEST(PartiteGraphTest, test_add_vertex) {
     graph::PartiteGraph<int, Vertex, Edge> graph;
 
     EXPECT_EQ(graph.get_partition<0>().size(), 0);
-    graph.add<vertex_partition>(0, {"vertex 0"});
+    graph.add_vertex<vertex_partition>(0, {"vertex 0"});
     EXPECT_EQ(graph.get_partition<0>().size(), 1);
 
     EXPECT_EQ(graph.get_partition<1>().size(), 0);
-    graph.add<edge_partition>(1, {0.5});
+    graph.add_vertex<edge_partition>(1, {0.5});
     EXPECT_EQ(graph.get_partition<1>().size(), 1);
 }
 
 TEST(PartiteGraphTest, test_get_vertex) {
     graph::PartiteGraph<int, Vertex, Edge> graph;
-    graph.add<vertex_partition>(0, {"vertex 0"});
-    graph.add<edge_partition>(1, {0.5});
+    graph.add_vertex<vertex_partition>(0, {"vertex 0"});
+    graph.add_vertex<edge_partition>(1, {0.5});
 
-    EXPECT_EQ(graph.get<vertex_partition>(0).name, "vertex 0");
-    EXPECT_EQ(graph.get<edge_partition>(1).weight, 0.5);
+    EXPECT_EQ(graph.get_vertex<vertex_partition>(0).name, "vertex 0");
+    EXPECT_EQ(graph.get_vertex<edge_partition>(1).weight, 0.5);
 }
 
 TEST(PartiteGraphTest, test_add_edge) {
@@ -68,10 +68,10 @@ TEST(PartiteGraphTest, test_add_edge) {
     graph::PartiteGraph<int, Vertex, Edge> graph;
 
     EXPECT_THROW(graph.add_edge(0, 1), std::runtime_error);
-    graph.add<vertex_partition>(0, {"vertex 0"});
-    graph.add<vertex_partition>(1, {"vertex 1"});
+    graph.add_vertex<vertex_partition>(0, {"vertex 0"});
+    graph.add_vertex<vertex_partition>(1, {"vertex 1"});
     EXPECT_THROW(graph.add_edge(0, 1), std::runtime_error);
-    graph.add<edge_partition>(2, {0.5});
+    graph.add_vertex<edge_partition>(2, {0.5});
     graph.add_edge(0, 2);
     graph.add_edge(2, 1);
     EXPECT_EQ(graph.get_children(0), expected);
