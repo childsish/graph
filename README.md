@@ -97,13 +97,13 @@ struct Edge { float weight; };
 
 // Add vertices
 graph::PartiteGraph<int, Vertex, Edge> graph;
-graph.add<vertex_partition>(0, {"A"});
-graph.add<vertex_partition>(1, {"B"});
-graph.add<vertex_partition>(2, {"C"});
-graph.add<vertex_partition>(3, {"D"});
-graph.add<edge_partition>(4, {1.0});
-graph.add<edge_partition>(5, {0.5});
-graph.add<edge_partition>(6, {0.0});
+graph.add_vertex<vertex_partition>(0, {"A"});
+graph.add_vertex<vertex_partition>(1, {"B"});
+graph.add_vertex<vertex_partition>(2, {"C"});
+graph.add_vertex<vertex_partition>(3, {"D"});
+graph.add_vertex<edge_partition>(4, {1.0});
+graph.add_vertex<edge_partition>(5, {0.5});
+graph.add_vertex<edge_partition>(6, {0.0});
 
 // Add edges
 graph.add_edge(0, 4);
