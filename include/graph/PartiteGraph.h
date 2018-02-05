@@ -23,13 +23,12 @@ namespace graph {
     public:
         void add_vertex(const V &vertex) = delete;
 
-        bool
-        has_vertex(const V &vertex) const {
+        bool has_vertex(const V &vertex) const {
             return false;
         }
 
-        unsigned int
-        get_vertex_partition(const V &vertex, unsigned int partition = 0) const {
+        unsigned int get_vertex_partition(const V &vertex,
+                                          unsigned int partition = 0) const {
             std::stringstream buffer;
             buffer << "Vertex " << vertex << " not found in any partition.";
             throw std::runtime_error(buffer.str());
@@ -38,6 +37,7 @@ namespace graph {
 
     template<typename V, typename T, typename ...Ts>
     class PartiteGraph<V, T, Ts...> : public PartiteGraph<V, Ts...> {
+    public:
 
         template<unsigned int partition>
         using PartitionTypeAt = typename std::tuple_element<partition, std::tuple<T, Ts...>>::type;
@@ -56,8 +56,6 @@ namespace graph {
         template<unsigned int partition>
         using Partition = typename std::enable_if<partition != 0,
                 std::unordered_map<V, PartitionTypeAt<partition>>>::type;
-
-    public:
 
         /**
          * Add a connection between from and to.
