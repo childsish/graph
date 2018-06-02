@@ -102,7 +102,7 @@ namespace graph {
         template <unsigned int partition>
         void add_vertex(const V &vertex, const PartitionType<partition> &type) {
             PartiteGraph<V, Ts...>& graph = *this;
-            graph.add_vertex<partition - 1>(vertex, type);
+            graph.template add_vertex<partition - 1>(vertex, type);
         }
 
         /**
@@ -134,8 +134,8 @@ namespace graph {
         template <unsigned int partition>
         const PartitionType<partition>&
         get_vertex(const V &vertex) const {
-            const PartiteGraph<V, Ts...>& graph = *this;
-            return graph.get_vertex<partition - 1>(vertex);
+            const PartiteGraph<V, Ts...> &graph = *this;
+            return graph.template get_vertex<partition - 1>(vertex);
         };
 
         /**
@@ -152,8 +152,8 @@ namespace graph {
         template<unsigned int partition>
         const Partition<partition>&
         get_partition() const {
-            const PartiteGraph<V, Ts...>& graph = *this;
-            return graph.get_partition<partition - 1>();
+            const PartiteGraph<V, Ts...> &graph = *this;
+            return graph.template get_partition<partition - 1>();
         }
 
         /**
