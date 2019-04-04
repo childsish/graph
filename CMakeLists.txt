@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 # Options
 
-option(GRAPH_BUILD_TESTS "Enable/Disable unit tests for the graph library." on)
+option(GRAPH_BUILD_TESTS "Enable/Disable unit tests for the graph library." off)
 
 
 # Add graph library
