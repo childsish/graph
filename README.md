@@ -2,35 +2,33 @@
 
 [![Build Status](https://travis-ci.org/childsish/graph.svg?branch=master)](https://travis-ci.org/childsish/graph)
 
-*graph* is a simple header library of basic C++ graph (as in networks, not plots) classes. A couple of basic classes are
-implemented that allow most other graph types to be simulated; `Graph` and `PartiteGraph`.
+*graph* is a simple header library of basic C++ graph (as in networks, not plots) classes.
+A couple of basic classes are implemented that allow most other graph types to be simulated; `Graph` and `PartiteGraph`.
  
-`Graph` is a directed graph with only one edge per vertex pair and no edge weights. Vertices do not need to be
-  predefined. Currently cyclic/acyclic behaviour needs to be enforced by the user. 
+`Graph` is a directed graph with only one edge per vertex pair and no edge weights.
+Vertices do not need to be predefined and can be automatically created when adding edges.
+Currently cyclic/acyclic restrictions needs to be enforced by the user.
   
-`PartiteGraph` is a subclass of `Graph` that splits vertices into separate partitions and prevents vertices from
-  belonging to multiple partitions or edges among vertices from the same partition.
+`PartiteGraph` is a subclass of `Graph` that splits vertices into separate partitions and prevents vertices from belonging to multiple partitions or edges among vertices from the same partition.
 
 ## `Graph` example
 
 ### Specifying type
 
-When declaring a `Graph`, the type of the vertex identifiers needs to be defined using the template parameter. Internally
-vertices are stored in an [`std::unordered_map`](1) and thus must follow the specifications outlined for
-[`UnorderedAssociativeContainers`](2).
+When declaring a `Graph`, the type of the vertex identifiers needs to be defined using the template parameter.
+Internally vertices are stored in an [`std::unordered_map`][1] and thus must follow the specifications outlined for [`UnorderedAssociativeContainers`][2].
 
 ```cpp
 #include <string>
 #include <graph/Graph.h>
 
 graph::Graph<int> int_graph;
-graph::Graph<std::String> string_graph;
+graph::Graph<std::string> string_graph;
 ```
 
 ### Adding edges
 
-Edges are added using `Graph::add_edge`. Unlike the `PartiteGraph`, vertices will be created automatically if they don't
-already exist. 
+Edges are added using `Graph::add_edge`. Unlike the `PartiteGraph`, vertices will be created automatically if they don't already exist. 
 
 ```cpp
 #include <graph/Graph.h>
@@ -39,7 +37,7 @@ graph::Graph<int> graph;
 graph.add_edge(0, 1);
 graph.add_edge(0, 2);
 
-graph.get_children(0);  // {0, 1}
+graph.get_children(0);  // {0, 1, 2}
 ```
 
 ### Querying neighbours
@@ -84,9 +82,8 @@ graph::PartiteGraph<int, Vertex, Edge> graph;
 
 ### Adding edges
 
-Edges are also added using `PartiteGraph::edge_edge`. However, unlike `Graph`, vertices are not created automatically
-and first need to be added using `PartiteGraph::add`. Additionally, an edge can not be created between two
-vertices from the same partition.
+Edges are also added using `PartiteGraph::add_edge`. However, unlike `Graph`, vertices are not created automatically and first need to be added using `PartiteGraph::add_vertex`.
+Additionally, an edge can not be created between two vertices from the same partition.
 
 ```cpp
 #include <graph/PartiteGraph.h>
